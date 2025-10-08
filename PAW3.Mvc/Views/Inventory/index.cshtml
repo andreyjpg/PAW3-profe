@@ -1,0 +1,76 @@
+﻿@model InventoryViewModel
+@{
+    ViewData["Title"] = "Inventory Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome @Model.Title</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Product Id</th>
+            <th>Unit Price</th>
+            <th>Units In Stock</th>
+            <th>Last Update</th>
+            <th>Date Added</th>
+            <th>Modified By</th>
+            <th>Products</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Inventories)
+        {
+            <tr>
+                <td>@item.InventoryId</td>
+                <td>@item.ProductId</td>
+                <td>@item.UnitPrice</td>
+                <td>@item.UnitsInStock</td>
+                <td>@item.LastUpdate</td>
+                <td>@item.DateAdded</td>
+                <td>@item.modifiedBy</td>
+                <td>
+                    <span class="d-flex gap-2">
+                        @foreach (var product in @item.Products)
+                        {
+                            @product.ProductName
+                        }
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<ul>
+    @foreach (var item in Model.Items)
+    {
+        var text = evalItem(@item);
+        if (doWeKnowHim(item))
+        {
+            <li>@item - @text!!!</li>
+        }
+        else
+        {
+            <li>@item</li>
+        }
+    }
+</ul>
+
+@functions {
+    public bool doWeKnowHim(string item)
+    {
+        return item.Contains("Les");
+    }
+
+    public string evalItem(string item)
+    {
+        if (item.Contains("Les"))
+            return "lo conocemos";
+        else
+            return "ok";
+    }
+}

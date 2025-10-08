@@ -13,6 +13,36 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProductBusiness, ProductBusiness>();
 builder.Services.AddScoped<IRepositoryProduct, RepositoryProduct>();
 
+builder.Services.AddScoped<ICategoryBusiness, CategoryBusiness>();
+builder.Services.AddScoped<IRepositoryCategory,RepositoryCategory>();
+
+builder.Services.AddScoped<IComponentBusiness, ComponentBusiness>();
+builder.Services.AddScoped<IRepositoryComponent, RepositoryComponent>();
+
+builder.Services.AddScoped<IInventoryBusiness, InventoryBusiness>();
+builder.Services.AddScoped<IRepositoryInventory, RepositoryInventory>();
+
+builder.Services.AddScoped<INotificationBusiness, NotificationBusiness>();
+builder.Services.AddScoped<IRepositoryNotification, RepositoryNotification>();
+
+builder.Services.AddScoped<IRoleBusiness, RoleBusiness>();
+builder.Services.AddScoped<IRepositoryRole, RepositoryRole>();
+
+builder.Services.AddScoped<ISupplierBusiness, SupplierBusiness>();
+builder.Services.AddScoped<IRepositorySupplier, RepositorySupplier>();
+
+builder.Services.AddScoped<ITaskBusiness, TaskBusiness>();
+builder.Services.AddScoped<IRepositoryTask, RepositoryTask>();
+
+builder.Services.AddScoped<IUserActionBusiness, UserActionBusiness>();
+builder.Services.AddScoped<IRepositoryUserAction, RepositoryUserAction>();
+
+builder.Services.AddScoped<IUserBusiness, UserBusiness>();
+builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
+
+builder.Services.AddScoped<IUserRoleBusiness, UserRoleBusiness>();
+builder.Services.AddScoped<IRepositoryUserRole, RepositoryUserRole>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

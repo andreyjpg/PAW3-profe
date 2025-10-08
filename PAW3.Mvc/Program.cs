@@ -15,6 +15,16 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IServiceLocatorService, ServiceLocatorService>();
 builder.Services.AddScoped<IServiceMapper, ServiceMapper>();
 builder.Services.AddScoped<IService<ProductDTO>, ProductService>();
+builder.Services.AddScoped<IService<CategoryDTO>, CategoryService>();
+builder.Services.AddScoped<IService<ComponentDTO>, ComponentService>();
+builder.Services.AddScoped<IService<NotificationDTO>, NotificationService>();
+builder.Services.AddScoped<IService<InventoryDTO>, InventoryService>();
+builder.Services.AddScoped<IService<RoleDTO>, RoleService>();
+builder.Services.AddScoped<IService<SupplierDTO>, SupplierService>();
+builder.Services.AddScoped<IService<TaskDTO>, TaskService>();
+builder.Services.AddScoped<IService<UserActionDTO>, UserActionService>();
+builder.Services.AddScoped<IService<UserDTO>, UserService>();
+builder.Services.AddScoped<IService<UserRoleDTO>, UserRoleService>();
 
 var app = builder.Build();
 
