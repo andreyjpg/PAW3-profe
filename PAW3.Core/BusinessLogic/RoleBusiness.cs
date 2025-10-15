@@ -24,21 +24,19 @@ public interface IRoleBusiness
     /// <returns></returns>
     Task<IEnumerable<Role>> GetRoles(int? id);
     /// <summary>
-    /// 
+    /// update and edit a Role information
     /// </summary>
-    /// <param name="Role"></param>
+    /// <param name="role"></param>
     /// <returns></returns>
-    Task<bool> SaveRoleAsync(Role Role);
+    Task<bool> UpsertRoleAsync(Role role);
 }
 
 public class RoleBusiness(IRepositoryRole repositoryRole) : IRoleBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveRoleAsync(Role Role)
+    public async Task<bool> UpsertRoleAsync(Role role)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryRole.UpdateAsync(Role);
+        return await repositoryRole.CheckBeforeSavingAsync(role);
     }
 
     /// </inheritdoc>

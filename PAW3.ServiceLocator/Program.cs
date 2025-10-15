@@ -1,6 +1,7 @@
 using PAW3.Architecture;
 using PAW3.Models.DTOs;
 using PAW3.ServiceLocator.Helper;
+using PAW3.ServiceLocator.ServiceFactory;
 using PAW3.ServiceLocator.Services;
 using PAW3.ServiceLocator.Services.Contracts;
 
@@ -39,7 +40,12 @@ builder.Services.AddScoped<IService<UserActionDTO>, UserActionService>();
 builder.Services.AddScoped<IService<UserRoleDTO>, UserRoleService>();
 builder.Services.AddScoped<IService<UserDTO>, UserService>();
 
+
+
 builder.Services.AddScoped<IServiceMapper, ServiceMapper>();
+
+builder.Services.AddScoped<IServiceFactory, ServiceFactory>();
+
 
 
 var app = builder.Build();

@@ -24,21 +24,19 @@ public interface ISupplierBusiness
     /// <returns></returns>
     Task<IEnumerable<Supplier>> GetSuppliers(int? id);
     /// <summary>
-    /// 
+    /// update and edit a Supplier information
     /// </summary>
-    /// <param name="Supplier"></param>
+    /// <param name="supplier"></param>
     /// <returns></returns>
-    Task<bool> SaveSupplierAsync(Supplier Supplier);
+    Task<bool> UpsertSupplierAsync(Supplier supplier);
 }
 
 public class SupplierBusiness(IRepositorySupplier repositorySupplier) : ISupplierBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveSupplierAsync(Supplier Supplier)
+    public async Task<bool> UpsertSupplierAsync(Supplier supplier)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositorySupplier.UpdateAsync(Supplier);
+        return await repositorySupplier.CheckBeforeSavingAsync(supplier);
     }
 
     /// </inheritdoc>

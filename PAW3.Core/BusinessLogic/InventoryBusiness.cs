@@ -12,40 +12,38 @@ namespace PAW3.Core.BusinessLogic;
 public interface IInventoryBusiness
 {
     /// <summary>
-    /// Deletes the Inventory associated with the Inventory id.
+    /// Deletes the inventories associated with the inventory id.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<bool> DeleteInventoryAsync(int id);
     /// <summary>
-    /// 
+    /// get list of inventories 
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<IEnumerable<Inventory>> GetInventorys(int? id);
     /// <summary>
-    /// 
+    /// update a inventory information
     /// </summary>
-    /// <param name="Inventory"></param>
+    /// <param name="product"></param>
     /// <returns></returns>
-    Task<bool> SaveInventoryAsync(Inventory Inventory);
+    Task<bool> UpsertInventoryAsync(Inventory product);
 }
 
 public class InventoryBusiness(IRepositoryInventory repositoryInventory) : IInventoryBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveInventoryAsync(Inventory Inventory)
+    public async Task<bool> UpsertInventoryAsync(Inventory inventory)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryInventory.UpdateAsync(Inventory);
+        return await repositoryInventory.CheckBeforeSavingAsync(inventory);
     }
 
     /// </inheritdoc>
     public async Task<bool> DeleteInventoryAsync(int id)
     {
-        var Inventory = await repositoryInventory.FindAsync(id);
-        return await repositoryInventory.DeleteAsync(Inventory);
+        var inventory = await repositoryInventory.FindAsync(id);
+        return await repositoryInventory.DeleteAsync(inventory);
     }
 
     /// </inheritdoc>

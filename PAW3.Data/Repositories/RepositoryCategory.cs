@@ -13,8 +13,20 @@ public interface IRepositoryCategory
     Task<bool> UpdateAsync(Category entity);
     Task<bool> UpdateManyAsync(IEnumerable<Category> entities);
     Task<bool> ExistsAsync(Category entity);
+    Task<bool> CheckBeforeSavingAsync(Category entity);
+
 }
 
 public class RepositoryCategory : RepositoryBase<Category>, IRepositoryCategory
 {
+    public async Task<bool> CheckBeforeSavingAsync(Category entity)
+    {
+        var exists = await ExistsAsync(entity);
+        return await UpsertAsync(entity, exists);
+    }
+
+    public async new Task<bool> ExistsAsync(Category entity)
+    {
+        return await DbContext.Categories.AnyAsync(x => x.CategoryId == entity.CategoryId);
+    }
 }

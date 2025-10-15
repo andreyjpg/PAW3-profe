@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PAW3.Core.BusinessLogic;
-using PAW3.Data.Models;
+using Notification = PAW3.Data.Models.Notification;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,38 +9,41 @@ namespace PAW3.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NotificationApiController(INotificationBusiness NotificationBusiness) : ControllerBase
+    public class NotificationApiController(INotificationBusiness notificationBusiness) : ControllerBase
     {
         // GET: api/<NotificationApiController>
         [HttpGet]
         public async Task<IEnumerable<Notification>> Get()
         {
-            return await NotificationBusiness.GetNotifications(id: null);
+            return await notificationBusiness.GetNotifications(id: null);
         }
 
         // GET api/<NotificationApiController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IEnumerable<Notification>> Get(int id)
         {
-            return "value";
+            return await notificationBusiness.GetNotifications(id);
         }
 
         // POST api/<NotificationApiController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<bool> Post([FromBody] Notification notification)
         {
+            return await notificationBusiness.UpsertNotificationAsync(notification);
         }
 
         // PUT api/<NotificationApiController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<bool> Put(int id, [FromBody] Notification value)
         {
+            return await notificationBusiness.UpsertNotificationAsync(value);
         }
 
         // DELETE api/<NotificationApiController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
+            return await notificationBusiness.DeleteNotificationAsync(id);
         }
     }
 }

@@ -12,40 +12,38 @@ namespace PAW3.Core.BusinessLogic;
 public interface IComponentBusiness
 {
     /// <summary>
-    /// Deletes the Component associated with the Component id.
+    /// Deletes the product associated with the product id.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<bool> DeleteComponentAsync(int id);
     /// <summary>
-    /// 
+    /// get list of products 
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<IEnumerable<Component>> GetComponents(int? id);
     /// <summary>
-    /// 
+    /// update a product information
     /// </summary>
-    /// <param name="Component"></param>
+    /// <param name="product"></param>
     /// <returns></returns>
-    Task<bool> SaveComponentAsync(Component Component);
+    Task<bool> UpsertComponentAsync(Component product);
 }
 
 public class ComponentBusiness(IRepositoryComponent repositoryComponent) : IComponentBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveComponentAsync(Component Component)
+    public async Task<bool> UpsertComponentAsync(Component product)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryComponent.UpdateAsync(Component);
+        return await repositoryComponent.CheckBeforeSavingAsync(product);
     }
 
     /// </inheritdoc>
     public async Task<bool> DeleteComponentAsync(int id)
     {
-        var Component = await repositoryComponent.FindAsync(id);
-        return await repositoryComponent.DeleteAsync(Component);
+        var product = await repositoryComponent.FindAsync(id);
+        return await repositoryComponent.DeleteAsync(product);
     }
 
     /// </inheritdoc>

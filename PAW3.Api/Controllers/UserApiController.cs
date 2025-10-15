@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PAW3.Core.BusinessLogic;
-using PAW3.Data.Models;
+using User = PAW3.Data.Models.User;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,38 +9,41 @@ namespace PAW3.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserApiController(IUserBusiness UserBusiness) : ControllerBase
+    public class UserApiController(IUserBusiness userBusiness) : ControllerBase
     {
         // GET: api/<UserApiController>
         [HttpGet]
         public async Task<IEnumerable<User>> Get()
         {
-            return await UserBusiness.GetUsers(id: null);
+            return await userBusiness.GetUsers(id: null);
         }
 
         // GET api/<UserApiController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IEnumerable<User>> Get(int id)
         {
-            return "value";
+            return await userBusiness.GetUsers(id);
         }
 
         // POST api/<UserApiController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<bool> Post([FromBody] User product)
         {
+            return await userBusiness.UpsertUserAsync(product);
         }
 
         // PUT api/<UserApiController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<bool> Put(int id, [FromBody] User value)
         {
+            return await userBusiness.UpsertUserAsync(value);
         }
 
         // DELETE api/<UserApiController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
+            return await userBusiness.DeleteUserAsync(id);
         }
     }
 }

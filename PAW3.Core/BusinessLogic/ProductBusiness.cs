@@ -18,27 +18,25 @@ public interface IProductBusiness
     /// <returns></returns>
     Task<bool> DeleteProductAsync(int id);
     /// <summary>
-    /// 
+    /// get list of products 
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<IEnumerable<Product>> GetProducts(int? id);
     /// <summary>
-    /// 
+    /// update a product information
     /// </summary>
     /// <param name="product"></param>
     /// <returns></returns>
-    Task<bool> SaveProductAsync(Product product);
+    Task<bool> UpsertProductAsync(Product product);
 }
 
 public class ProductBusiness(IRepositoryProduct repositoryProduct) : IProductBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveProductAsync(Product product)
+    public async Task<bool> UpsertProductAsync(Product product)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryProduct.UpdateAsync(product);
+        return await repositoryProduct.CheckBeforeSavingAsync(product);
     }
 
     /// </inheritdoc>

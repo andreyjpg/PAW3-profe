@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PAW3.Core.BusinessLogic;
-using PAW3.Data.Models;
+using Role = PAW3.Data.Models.Role;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,27 +20,30 @@ namespace PAW3.Api.Controllers
 
         // GET api/<RoleApiController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IEnumerable<Role>> Get(int id)
         {
-            return "value";
+            return await RoleBusiness.GetRoles(id);
         }
 
         // POST api/<RoleApiController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<bool> Post([FromBody] Role role)
         {
+            return await RoleBusiness.UpsertRoleAsync(role);
         }
 
         // PUT api/<RoleApiController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<bool> Put(int id, [FromBody] Role value)
         {
+            return await RoleBusiness.UpsertRoleAsync(value);
         }
 
         // DELETE api/<RoleApiController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
+            return await RoleBusiness.DeleteRoleAsync(id);
         }
     }
 }

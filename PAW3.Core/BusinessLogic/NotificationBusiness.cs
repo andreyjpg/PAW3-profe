@@ -24,21 +24,19 @@ public interface INotificationBusiness
     /// <returns></returns>
     Task<IEnumerable<Notification>> GetNotifications(int? id);
     /// <summary>
-    /// 
+    /// update and edit a Notification information
     /// </summary>
-    /// <param name="Notification"></param>
+    /// <param name="category"></param>
     /// <returns></returns>
-    Task<bool> SaveNotificationAsync(Notification Notification);
+    Task<bool> UpsertNotificationAsync(Notification notification);
 }
 
 public class NotificationBusiness(IRepositoryNotification repositoryNotification) : INotificationBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveNotificationAsync(Notification Notification)
+    public async Task<bool> UpsertNotificationAsync(Notification notification)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryNotification.UpdateAsync(Notification);
+        return await repositoryNotification.CheckBeforeSavingAsync(notification);
     }
 
     /// </inheritdoc>
