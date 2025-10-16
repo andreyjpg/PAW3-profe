@@ -7,6 +7,10 @@ namespace PAW3.Mvc.ServiceLocator;
 public interface IServiceLocatorService
 {
     Task<IEnumerable<T>> GetDataAsync<T>(string name);
+    Task<bool> UpdateDataAsync(string name, string id, string content);
+    Task<bool> DeleteDataAsync(string name, string contentId);
+    Task<bool> SaveDataAsync(string name, string content);
+
 }
 
 public class ServiceLocatorService(IRestProvider restProvider, IServiceMapper serviceMapper) : IServiceLocatorService
@@ -17,23 +21,23 @@ public class ServiceLocatorService(IRestProvider restProvider, IServiceMapper se
         return await JsonProvider.DeserializeAsync<IEnumerable<T>>(response);
     }
 
-    public async Task<bool> UpdateDataAsync(string id, string name)
+    public async Task<bool> UpdateDataAsync(string name, string id, string content)
     {
-        var response = await restProvider.PutAsync("https://localhost:7130/api/ServiceLocator/", id, name);
+        var response = await restProvider.PutAsync("https://localhost:7130/api/ServiceLocator/", name, content);
         Console.WriteLine(response);
         return response.Length > 0;
     }
 
-    public async Task<bool> DeleteDataAsync(string id)
+    public async Task<bool> DeleteDataAsync(string name, string contentId )
     {
-        var response = await restProvider.DeleteAsync("https://localhost:7130/api/ServiceLocator/", id);
+        var response = await restProvider.DeleteAsync("https://localhost:7130/api/ServiceLocator/", name, contentId);
         Console.WriteLine(response);
         return response.Length > 0;
     }
 
-    public async Task<bool> SaveDataAsync(string entity)
+    public async Task<bool> SaveDataAsync(string name, string content)
     {
-        var response = await restProvider.PostAsync("https://localhost:7130/api/ServiceLocator/", entity);
+        var response = await restProvider.PostAsync("https://localhost:7130/api/ServiceLocator/",name, content);
         Console.WriteLine(response);
         return response.Length > 0;
     }

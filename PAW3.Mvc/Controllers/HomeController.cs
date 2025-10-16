@@ -4,6 +4,7 @@ using PAW3.Mvc.Models;
 using PAW3.Mvc.ServiceLocator;
 using PAW3.ServiceLocator.Helper;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace PAW3.Mvc.Controllers
 {
@@ -33,7 +34,18 @@ namespace PAW3.Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(ProductDTO productDTO)
         {
+            // CODIGO PLACEHOLDER
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Datos inválidos.";
+                return RedirectToAction(nameof(Index));
+            }
 
+            var json = JsonSerializer.Serialize(productDTO);
+            var ok = await ((ServiceLocatorService)_serviceLocator).SaveDataAsync(json);
+
+            TempData[ok ? "Ok" : "Error"] = ok ? "Producto creado." : "No se pudo crear el producto.";
+            return RedirectToAction(nameof(Index));
         }
 
 
