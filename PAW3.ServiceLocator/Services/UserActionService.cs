@@ -9,7 +9,7 @@ public interface IUserActionService
 {
     Task<IEnumerable<UserActionDTO>> GetDataAsync();
     Task<bool> CreateDataAsync(string content);
-    Task<bool> UpdateDataAsync(string id, string content);
+    Task<bool> UpdateDataAsync(string content);
     Task<bool> DeleteDataAsync(string id);
 }
 
@@ -29,10 +29,10 @@ public class UserActionService(IRestProvider restProvider, IConfiguration config
         return bool.Parse(response);
     }
 
-    public async Task<bool> UpdateDataAsync(string id, string content)
+    public async Task<bool> UpdateDataAsync(string content)
     {
         var url = configuration.GetStringFromAppSettings("APIS", "UserAction");
-        var response = await restProvider.PutAsync(url, id, content);
+        var response = await restProvider.PutAsync(url, content);
         return bool.Parse(response);
     }
 

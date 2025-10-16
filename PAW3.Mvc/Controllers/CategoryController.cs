@@ -4,6 +4,7 @@ using PAW3.Models.DTOs;
 using PAW3.Mvc.Models;
 using PAW3.Mvc.ServiceLocator;
 using PAW3.ServiceLocator.Helper;
+using System.Text;
 using System.Text.Json;
 
 namespace PAW3.Mvc.Controllers
@@ -37,18 +38,19 @@ namespace PAW3.Mvc.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(CategoryDTO category)
+        public async Task<IActionResult> Create(CategoryDTO dto)
         {
             if (ModelState.IsValid)
             {
-                var json = JsonSerializer.Serialize(category);
+                var json = JsonSerializer.Serialize(dto);
+
                 var success = await _serviceLocator.SaveDataAsync("category", json);
 
                 if (success)
                     return RedirectToAction(nameof(Index));
             }
 
-            return View(category);
+            return View(dto);
         }
 
         //EDIT

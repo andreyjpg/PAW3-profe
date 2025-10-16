@@ -39,7 +39,7 @@ public interface IRestProvider
 	/// <param name="requestUri">The URI of the resource to update.</param>
 	/// <param name="content">The content to send in the request body.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> PutAsync(string endpoint, string id, string content);
+	Task<string> PutAsync(string endpoint, string content);
 }
 
 /// <summary>
@@ -79,7 +79,12 @@ public class RestProvider : IRestProvider
 		{
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
 				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
-			var result = await RestProviderHelpers.GetResponse(response);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException($"Error: {response.StatusCode}, Details: {responseBody}");
+            }
+            var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}
 		catch (Exception ex)
@@ -95,12 +100,12 @@ public class RestProvider : IRestProvider
 	/// <param name="id">The ID of the resource to update.</param>
 	/// <param name="content">The content to send in the request body.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> PutAsync(string endpoint, string id, string content)
+	public async Task<string> PutAsync(string endpoint, string content)
 	{
 		try
 		{
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.PutAsync(id, RestProviderHelpers.CreateContent(content));
+				.PutAsync(endpoint, RestProviderHelpers.CreateContent(content));
 			var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}

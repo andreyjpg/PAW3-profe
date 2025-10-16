@@ -9,7 +9,7 @@ public interface IUserRoleService
 {
     Task<IEnumerable<UserRoleDTO>> GetDataAsync();
     Task<bool> CreateDataAsync(string content);
-    Task<bool> UpdateDataAsync(string id, string content);
+    Task<bool> UpdateDataAsync(string content);
     Task<bool> DeleteDataAsync(string id);
 }
 
@@ -29,10 +29,10 @@ public class UserRoleService(IRestProvider restProvider, IConfiguration configur
         return bool.Parse(response);
     }
 
-    public async Task<bool> UpdateDataAsync(string id, string content)
+    public async Task<bool> UpdateDataAsync(string content)
     {
         var url = configuration.GetStringFromAppSettings("APIS", "UserRole");
-        var response = await restProvider.PutAsync(url, id, content);
+        var response = await restProvider.PutAsync(url, content);
         return bool.Parse(response);
     }
 

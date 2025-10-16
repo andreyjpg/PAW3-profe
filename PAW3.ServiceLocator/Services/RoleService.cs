@@ -9,7 +9,7 @@ public interface IRoleService
 {
     Task<IEnumerable<RoleDTO>> GetDataAsync();
     Task<bool> CreateDataAsync(string content);
-    Task<bool> UpdateDataAsync(string id, string content);
+    Task<bool> UpdateDataAsync(string content);
     Task<bool> DeleteDataAsync(string id);
 }
 
@@ -29,10 +29,10 @@ public class RoleService(IRestProvider restProvider, IConfiguration configuratio
         return bool.Parse(response);
     }
 
-    public async Task<bool> UpdateDataAsync(string id, string content)
+    public async Task<bool> UpdateDataAsync(string content)
     {
         var url = configuration.GetStringFromAppSettings("APIS", "Role");
-        var response = await restProvider.PutAsync(url, id, content);
+        var response = await restProvider.PutAsync(url, content);
         return bool.Parse(response);
     }
 
