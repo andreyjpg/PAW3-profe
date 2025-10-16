@@ -30,6 +30,13 @@ namespace PAW3.Mvc.Controllers
             return View(homeViewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Post(ProductDTO productDTO)
+        {
+
+        }
+
+
         public IActionResult Privacy()
         {
             return View();
