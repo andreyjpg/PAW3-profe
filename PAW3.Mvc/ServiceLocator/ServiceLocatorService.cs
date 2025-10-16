@@ -30,14 +30,14 @@ public class ServiceLocatorService(IRestProvider restProvider, IServiceMapper se
 
     public async Task<bool> DeleteDataAsync(string name, string contentId )
     {
-        var response = await restProvider.DeleteAsync("https://localhost:7130/api/ServiceLocator/", name, contentId);
+        var response = await restProvider.DeleteAsync("https://localhost:7130/api/ServiceLocator/", name);
         Console.WriteLine(response);
         return response.Length > 0;
     }
 
     public async Task<bool> SaveDataAsync(string name, string content)
     {
-        var response = await restProvider.PostAsync("https://localhost:7130/api/ServiceLocator/",name, content);
+        var response = await restProvider.PostAsync($"https://localhost:7130/api/ServiceLocator/{name}", content);
         Console.WriteLine(response);
         return response.Length > 0;
     }

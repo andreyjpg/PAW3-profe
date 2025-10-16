@@ -14,7 +14,7 @@ public interface IRestProvider
 	/// <param name="endpoint">The endpoint for the DELETE request.</param>
 	/// <param name="id">The ID of the resource to delete.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> DeleteAsync(string endpoint, string id, string contentId);
+	Task<string> DeleteAsync(string endpoint, string ids);
 
 	/// <summary>
 	/// Retrieves a resource asynchronously.
@@ -30,7 +30,7 @@ public interface IRestProvider
 	/// <param name="endpoint">The endpoint for the POST request.</param>
 	/// <param name="content">The content to send in the request body.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> PostAsync(string endpoint, string name, string content);
+	Task<string> PostAsync(string endpoint, string content);
 
 	/// <summary>
 	/// Updates a resource asynchronously.
@@ -73,12 +73,12 @@ public class RestProvider : IRestProvider
 	/// <param name="endpoint">The endpoint for the POST request.</param>
 	/// <param name="content">The content to send in the request body.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> PostAsync(string endpoint, string id, string content)
+	public async Task<string> PostAsync(string endpoint, string content)
 	{
 		try
 		{
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.PostAsync(id, RestProviderHelpers.CreateContent(content));
+				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
 			var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}
@@ -116,7 +116,7 @@ public class RestProvider : IRestProvider
 	/// <param name="endpoint">The endpoint for the DELETE request.</param>
 	/// <param name="id">The ID of the resource to delete.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> DeleteAsync(string endpoint, string id, string contentId)
+	public async Task<string> DeleteAsync(string endpoint, string id)
 	{
 		try
 		{

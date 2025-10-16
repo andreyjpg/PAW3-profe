@@ -31,22 +31,22 @@ namespace PAW3.Mvc.Controllers
             return View(homeViewModel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(ProductDTO productDTO)
-        {
-            // CODIGO PLACEHOLDER
-            if (!ModelState.IsValid)
-            {
-                TempData["Error"] = "Datos inválidos.";
-                return RedirectToAction(nameof(Index));
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> Post(ProductDTO productDTO)
+        //{
+        //    // CODIGO PLACEHOLDER
+        //    if (!ModelState.IsValid)
+        //    {
+        //        TempData["Error"] = "Datos inválidos.";
+        //        return RedirectToAction(nameof(Index));
+        //    }
 
-            var json = JsonSerializer.Serialize(productDTO);
-            var ok = await ((ServiceLocatorService)_serviceLocator).SaveDataAsync(json);
+        //    var json = JsonSerializer.Serialize(productDTO);
+        //    var ok = await ((ServiceLocatorService)_serviceLocator).SaveDataAsync(json);
 
-            TempData[ok ? "Ok" : "Error"] = ok ? "Producto creado." : "No se pudo crear el producto.";
-            return RedirectToAction(nameof(Index));
-        }
+        //    TempData[ok ? "Ok" : "Error"] = ok ? "Producto creado." : "No se pudo crear el producto.";
+        //    return RedirectToAction(nameof(Index));
+        //}
 
 
         public IActionResult Privacy()
