@@ -1,5 +1,6 @@
 ﻿using PAW3.Architecture.Helpers;
 using System.Collections.Generic;
+using System.Net;
 
 namespace PAW3.Architecture;
 
@@ -80,10 +81,6 @@ public class RestProvider : IRestProvider
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
 				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
             var responseBody = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApplicationException($"Error: {response.StatusCode}, Details: {responseBody}");
-            }
             var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}
@@ -105,7 +102,7 @@ public class RestProvider : IRestProvider
 		try
 		{
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.PutAsync(endpoint, RestProviderHelpers.CreateContent(content));
+				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
 			var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}
@@ -126,8 +123,12 @@ public class RestProvider : IRestProvider
 		try
 		{
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.DeleteAsync(id);
-			var result = await RestProviderHelpers.GetResponse(response);
+				.DeleteAsync($"{endpoint}/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException($"Error: {response.StatusCode}, Details: {response}");
+            }
+            var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}
 		catch (Exception ex)

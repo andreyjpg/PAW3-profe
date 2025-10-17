@@ -43,7 +43,6 @@ namespace PAW3.Mvc.Controllers
             if (ModelState.IsValid)
             {
                 var json = JsonSerializer.Serialize(dto);
-
                 var success = await _serviceLocator.SaveDataAsync("category", json);
 
                 if (success)
@@ -66,13 +65,13 @@ namespace PAW3.Mvc.Controllers
             return View(category);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Edit(string id, CategoryDTO category)
+        [HttpPost]
+        public async Task<IActionResult> Edit(CategoryDTO category)
         {
             if (ModelState.IsValid)
             {
                 var json = JsonSerializer.Serialize(category);
-                var success = await _serviceLocator.UpdateDataAsync("category", id, json);
+                var success = await _serviceLocator.UpdateDataAsync("category", json);
 
                 if (success)
                     return RedirectToAction(nameof(Index));
@@ -84,7 +83,7 @@ namespace PAW3.Mvc.Controllers
         //DELETE
         public async Task<IActionResult> Delete(string id)
         {
-            var success = await _serviceLocator.SaveDataAsync("category", id);
+            var success = await _serviceLocator.DeleteDataAsync("category", id);
 
             if (!success)
                 _logger.LogWarning($"Failed to delete category with ID {id}");

@@ -38,7 +38,7 @@ public class ServiceLocatorController : ControllerBase
         return Ok(created);
     }
 
-    [HttpDelete("{key}")]
+    [HttpDelete("{key}/{id}")]
     public async Task<IActionResult> Delete(string key, string id)
     {
         dynamic service = _factory.Create(key);
