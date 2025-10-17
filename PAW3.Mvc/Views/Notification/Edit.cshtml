@@ -1,0 +1,47 @@
+﻿@model PAW3.Models.DTOs.NotificationDTO
+@{
+    ViewData["Title"] = "Edit Notification";
+}
+
+<h2 class="mb-4">Edit Notification</h2>
+
+<form asp-action="Edit" method="post" class="card p-4 shadow-sm">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="UserId" class="form-label fw-bold"></label>
+            <input asp-for="UserId" class="form-control" type="number" />
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="IsRead" class="form-label fw-bold"></label>
+            <select asp-for="IsRead" class="form-select">
+                <option value="">-- Select --</option>
+                <option value="true">Read</option>
+                <option value="false">Unread</option>
+            </select>
+            <span asp-validation-for="IsRead" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Message" class="form-label fw-bold"></label>
+        <textarea asp-for="Message" class="form-control"></textarea>
+        <span asp-validation-for="Message" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CreatedAt" class="form-label fw-bold"></label>
+        <input asp-for="CreatedAt" class="form-control" type="datetime-local" />
+        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2">Update</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

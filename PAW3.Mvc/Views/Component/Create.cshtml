@@ -1,0 +1,29 @@
+﻿@model PAW3.Models.DTOs.ComponentDTO
+@{
+    ViewData["Title"] = "Create Component";
+}
+
+<h2 class="mb-4">Add New Component</h2>
+
+<form asp-action="Create" method="post" class="card p-4 shadow-sm">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-bold"></label>
+        <input asp-for="Name" class="form-control" placeholder="Component name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Content" class="form-label fw-bold"></label>
+        <input asp-for="Content" class="form-control" placeholder="Component content" />
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success me-2">Save</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

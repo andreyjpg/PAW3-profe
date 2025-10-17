@@ -7,43 +7,40 @@ using System.Threading.Tasks;
 
 namespace PAW3.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/useraction")]
     [ApiController]
-    public class UserActionApiController(IUserActionBusiness userActionBusiness) : ControllerBase
+    public class UserActionApiController : ControllerBase
     {
-        // GET: api/<UserActionApiController>
+        private readonly IUserActionBusiness userActionBusiness;
+
+        public UserActionApiController(IUserActionBusiness userActionBusiness)
+        {
+            this.userActionBusiness = userActionBusiness;
+        }
+
+        // GET api/useraction
         [HttpGet]
         public async Task<IEnumerable<UserAction>> Get()
-        {
-            return await userActionBusiness.GetUserActions(id: null);
-        }
+            => await userActionBusiness.GetUserActions(null);
 
-        // GET api/<UserActionApiController>/5
+        // GET api/useraction/5
         [HttpGet("{id}")]
         public async Task<IEnumerable<UserAction>> Get(int id)
-        {
-            return await userActionBusiness.GetUserActions(id);
-        }
+            => await userActionBusiness.GetUserActions(id);
 
-        // POST api/<UserActionApiController>
+        // POST api/useraction
         [HttpPost]
-        public async Task<bool> Post([FromBody] UserAction product)
-        {
-            return await userActionBusiness.UpsertUserActionAsync(product);
-        }
+        public async Task<bool> Post([FromBody] UserAction value)
+            => await userActionBusiness.UpsertUserActionAsync(value);
 
-        // PUT api/<UserActionApiController>/5
-        [HttpPut("{id}")]
-        public async Task<bool> Put(int id, [FromBody] UserAction value)
-        {
-            return await userActionBusiness.UpsertUserActionAsync(value);
-        }
+        // PUT api/useraction
+        [HttpPut]
+        public async Task<bool> Put([FromBody] UserAction value)
+            => await userActionBusiness.UpsertUserActionAsync(value);
 
-        // DELETE api/<UserActionApiController>/5
+        // DELETE api/useraction/5
         [HttpDelete("{id}")]
         public async Task<bool> Delete(int id)
-        {
-            return await userActionBusiness.DeleteUserActionAsync(id);
-        }
+            => await userActionBusiness.DeleteUserActionAsync(id);
     }
 }

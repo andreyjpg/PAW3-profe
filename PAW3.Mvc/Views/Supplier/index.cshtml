@@ -1,17 +1,16 @@
-﻿@model SupplierViewModel
+﻿@model PAW3.Mvc.Models.SupplierViewModel
 @{
-    ViewData["Title"] = "Supplier Page";
+    ViewData["Title"] = "Suppliers";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome @Model.Title</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2 class="mb-4">Suppliers</h2>
 
-<table class="table table-dark table-striped">
-    <thead>
+<a asp-action="Create" class="btn btn-primary mb-3">Add New Supplier</a>
+
+<table class="table table-striped table-hover align-middle">
+    <thead class="table-dark">
         <tr>
-            <th>Id</th>
+            <th>ID</th>
             <th>Supplier Name</th>
             <th>Contact Name</th>
             <th>Contact Title</th>
@@ -21,63 +20,40 @@
             <th>Country</th>
             <th>Last Modified</th>
             <th>Modified By</th>
-            <th>Products</th>
+            <th class="text-end">Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Suppliers)
+        @if (Model?.Suppliers != null && Model.Suppliers.Any())
+        {
+            foreach (var item in Model.Suppliers)
+            {
+                <tr>
+                    <td>@item.SupplierId</td>
+                    <td>@item.SupplierName</td>
+                    <td>@item.ContactName</td>
+                    <td>@item.ContactTitle</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Address</td>
+                    <td>@item.City</td>
+                    <td>@item.Country</td>
+                    <td>@item.LastModified</td>
+                    <td>@item.ModifiedBy</td>
+                    <td>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Edit" asp-route-id="@item.SupplierId" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.SupplierId" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete this supplier?');">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@item.SupplierId</td>
-                <td>@item.SupplierName</td>
-                <td>@item.ContactName</td>
-                <td>@item.ContactTitle</td>
-                <td>@item.Phone</td>
-                <td>@item.Address</td>
-                <td>@item.City</td>
-                <td>@item.Country</td>
-                <td>@item.LastModified</td>
-                <td>@item.ModifiedBy</td>
-
-                <td>
-                    <span class="d-flex gap-2">
-                        @foreach (var product in @item.Products)
-                        {
-                            @product.ProductName
-                        }
-                    </span>
-                </td>
+                <td colspan="11" class="text-center text-muted">No suppliers found</td>
             </tr>
         }
     </tbody>
 </table>
-
-<ul>
-    @foreach (var item in Model.Items)
-    {
-        var text = evalItem(@item);
-        if (doWeKnowHim(item))
-        {
-            <li>@item - @text!!!</li>
-        }
-        else
-        {
-            <li>@item</li>
-        }
-    }
-</ul>
-
-@functions {
-    public bool doWeKnowHim(string item)
-    {
-        return item.Contains("Les");
-    }
-
-    public string evalItem(string item)
-    {
-        if (item.Contains("Les"))
-            return "lo conocemos";
-        else
-            return "ok";
-    }
-}

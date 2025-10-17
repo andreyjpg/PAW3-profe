@@ -49,9 +49,11 @@ public class UserActionBusiness(IRepositoryUserAction repositoryUserAction) : IU
     /// </inheritdoc>
     public async Task<IEnumerable<UserAction>> GetUserActions(int? id)
     {
-        return id == null
-            ? await repositoryUserAction.ReadAsync()
-            : [await repositoryUserAction.FindAsync((int)id)];
+        if (id == null)
+            return await repositoryUserAction.ReadAsync();
+
+        var entity = await repositoryUserAction.FindAsync(id.Value);
+        return new List<UserAction> { entity };
     }
 }
 
