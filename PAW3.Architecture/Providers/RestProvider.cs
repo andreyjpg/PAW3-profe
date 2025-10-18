@@ -1,5 +1,6 @@
 ﻿using PAW3.Architecture.Helpers;
 using System.Collections.Generic;
+using System.Net;
 
 namespace PAW3.Architecture;
 
@@ -14,7 +15,7 @@ public interface IRestProvider
 	/// <param name="endpoint">The endpoint for the DELETE request.</param>
 	/// <param name="id">The ID of the resource to delete.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> DeleteAsync(string endpoint, string id);
+	Task<string> DeleteAsync(string endpoint, string ids);
 
 	/// <summary>
 	/// Retrieves a resource asynchronously.
@@ -39,7 +40,7 @@ public interface IRestProvider
 	/// <param name="requestUri">The URI of the resource to update.</param>
 	/// <param name="content">The content to send in the request body.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> PutAsync(string endpoint, string id, string content);
+	Task<string> PutAsync(string endpoint, string content);
 }
 
 /// <summary>
@@ -77,9 +78,15 @@ public class RestProvider : IRestProvider
 	{
 		try
 		{
+
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
 				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
-			var result = await RestProviderHelpers.GetResponse(response);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException($"Error: {response.StatusCode}, Details: {response}");
+            }
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}
 		catch (Exception ex)
@@ -95,12 +102,12 @@ public class RestProvider : IRestProvider
 	/// <param name="id">The ID of the resource to update.</param>
 	/// <param name="content">The content to send in the request body.</param>
 	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> PutAsync(string endpoint, string id, string content)
+	public async Task<string> PutAsync(string endpoint, string content)
 	{
 		try
 		{
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.PutAsync(id, RestProviderHelpers.CreateContent(content));
+				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
 			var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}
@@ -121,8 +128,12 @@ public class RestProvider : IRestProvider
 		try
 		{
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.DeleteAsync(id);
-			var result = await RestProviderHelpers.GetResponse(response);
+				.DeleteAsync($"{endpoint}/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException($"Error: {response.StatusCode}, Details: {response}");
+            }
+            var result = await RestProviderHelpers.GetResponse(response);
 			return result;
 		}
 		catch (Exception ex)

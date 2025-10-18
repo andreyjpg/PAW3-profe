@@ -3,6 +3,7 @@ using PAW3.Models.DTOs;
 using PAW3.ServiceLocator.Helper;
 using PAW3.ServiceLocator.ServiceFactory;
 using PAW3.ServiceLocator.Services;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,26 +30,28 @@ public class ServiceLocatorController : ControllerBase
     }
 
     [HttpPost("{key}")]
-    public async Task<IActionResult> Post(string key, [FromBody] string dto)
+    public async Task<IActionResult> Post(string key, [FromBody] object dto)
     {
         dynamic service = _factory.Create(key);
-        var created = await service.CreateDataAsync(dto);
+        var stringJson = JsonSerializer.Serialize(dto);
+        var created = await service.CreateDataAsync(stringJson);
         return Ok(created);
     }
 
-    [HttpDelete("{key}")]
-    public async Task<IActionResult> Delete(string key)
+    [HttpDelete("{key}/{id}")]
+    public async Task<IActionResult> Delete(string key, string id)
     {
         dynamic service = _factory.Create(key);
-        var data = await service.DeleteDataAsync();
+        var data = await service.DeleteDataAsync(id);
         return Ok(data);
     }
 
     [HttpPut("{key}")]
-    public async Task<IActionResult> Update(string key, [FromBody] string dto)
+    public async Task<IActionResult> Update(string key, [FromBody] object dto)
     {
         dynamic service = _factory.Create(key);
-        var updated = await service.UpdateDataAsync(dto);
+        var stringJson = JsonSerializer.Serialize(dto);
+        var updated = await service.UpdateDataAsync(stringJson);
         return Ok(updated);
     }
 

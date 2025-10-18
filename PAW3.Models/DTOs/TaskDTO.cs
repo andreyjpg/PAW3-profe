@@ -24,5 +24,5 @@ public class TaskDTO
     [JsonPropertyName("lastModified")]
     public DateTime? LastModified {  get; set; }
     [JsonPropertyName("modifiedBy")]
-    public string? modifiedBy { get; set; }
+    public string? ModifiedBy { get; set; }
 }

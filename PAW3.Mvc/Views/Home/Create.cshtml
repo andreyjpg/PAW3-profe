@@ -1,0 +1,57 @@
+﻿@model PAW3.Models.DTOs.ProductDTO
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h2 class="mb-4">Add New Product</h2>
+
+<form asp-action="Create" method="post" class="card p-4 shadow-sm">
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="ProductName" class="form-label fw-bold"></label>
+            <input asp-for="ProductName" class="form-control" placeholder="Product name" />
+            <span asp-validation-for="ProductName" class="text-danger"></span>
+        </div>
+
+        <div class="col">
+            <label asp-for="InventoryId" class="form-label fw-bold"></label>
+            <textarea asp-for="InventoryId" class="form-control" placeholder="Inventory Id"></textarea>
+            <span asp-validation-for="InventoryId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="SupplierId" class="form-label fw-bold"></label>
+            <input asp-for="SupplierId" class="form-control" placeholder="Supplier Id" />
+            <span asp-validation-for="SupplierId" class="text-danger"></span>
+        </div>
+
+        <div class="col">
+            <label asp-for="Description" class="form-label fw-bold"></label>
+            <textarea asp-for="Description" class="form-control" placeholder="Description"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="Rating" class="form-label fw-bold"></label>
+            <input asp-for="Rating" class="form-control" placeholder="Rating" />
+            <span asp-validation-for="Rating" class="text-danger"></span>
+        </div>
+
+        <div class="col">
+            <label asp-for="CategoryId" class="form-label fw-bold"></label>
+            <textarea asp-for="CategoryId" class="form-control" placeholder="Category Id"></textarea>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success me-2">Save</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

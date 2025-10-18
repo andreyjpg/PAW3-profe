@@ -4,6 +4,8 @@ using PAW3.Models.DTOs;
 using PAW3.Mvc.Models;
 using PAW3.Mvc.ServiceLocator;
 using PAW3.ServiceLocator.Helper;
+using System.Text;
+using System.Text.Json;
 
 namespace PAW3.Mvc.Controllers
 {
@@ -20,6 +22,7 @@ namespace PAW3.Mvc.Controllers
             _serviceMapper = serviceMapper;
         }
 
+        // READ
         public async Task<IActionResult> Index()
         {
             var categories = await _serviceLocator.GetDataAsync<CategoryDTO>("category");
@@ -29,5 +32,68 @@ namespace PAW3.Mvc.Controllers
             };
             return View(categoryViewModel);
         }
+
+        // CREATE
+        [HttpGet]
+        public IActionResult Create() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CategoryDTO dto)
+        {
+            if (ModelState.IsValid)
+            {
+                dto.LastModified = DateTime.Now;
+                dto.ModifiedBy = "MVC";
+                var json = JsonSerializer.Serialize(dto);
+                var success = await _serviceLocator.SaveDataAsync("category", json);
+
+                if (success)
+                    return RedirectToAction(nameof(Index));
+            }
+
+            return View(dto);
+        }
+
+        //EDIT
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var categories = await _serviceLocator.GetDataAsync<CategoryDTO>("category");
+            var category = categories.FirstOrDefault(c => c.CategoryId == id);
+
+            if (category == null)
+                return NotFound();
+
+            return View(category);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CategoryDTO category)
+        {
+            if (ModelState.IsValid)
+            {
+                category.LastModified = DateTime.Now;
+                category.ModifiedBy = "MVC";
+                var json = JsonSerializer.Serialize(category);
+                var success = await _serviceLocator.UpdateDataAsync("category", json);
+
+                if (success)
+                    return RedirectToAction(nameof(Index));
+            }
+
+            return View(category);
+        }
+
+        //DELETE
+        public async Task<IActionResult> Delete(string id)
+        {
+            var success = await _serviceLocator.DeleteDataAsync("category", id);
+
+            if (!success)
+                _logger.LogWarning($"Failed to delete category with ID {id}");
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
