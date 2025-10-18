@@ -1,4 +1,5 @@
-﻿using PAW3.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PAW3.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,20 @@ public interface IRepositoryUserAction
     Task<bool> UpdateAsync(UserAction entity);
     Task<bool> UpdateManyAsync(IEnumerable<UserAction> entities);
     Task<bool> ExistsAsync(UserAction entity);
+    Task<bool> CheckBeforeSavingAsync(UserAction entity);
+
 }
 
 public class RepositoryUserAction : RepositoryBase<UserAction>, IRepositoryUserAction
 {
+    public async Task<bool> CheckBeforeSavingAsync(UserAction entity)
+    {
+        var exists = await ExistsAsync(entity);
+        return await UpsertAsync(entity, exists);
+    }
+
+    public async new Task<bool> ExistsAsync(UserAction entity)
+    {
+        return await DbContext.UserActions.AnyAsync(x => x.Id == entity.Id);
+    }
 }

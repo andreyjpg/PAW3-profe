@@ -1,0 +1,30 @@
+﻿@model PAW3.Models.DTOs.ComponentDTO
+@{
+    ViewData["Title"] = "Edit Component";
+}
+
+<h2 class="mb-4">Edit Component</h2>
+
+<form asp-action="Edit" method="post" class="card p-4 shadow-sm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-bold"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Content" class="form-label fw-bold"></label>
+        <input asp-for="Content" class="form-control" />
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2">Update</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

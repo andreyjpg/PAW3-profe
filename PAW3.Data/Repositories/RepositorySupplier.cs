@@ -1,4 +1,5 @@
-﻿using PAW3.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PAW3.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,20 @@ public interface IRepositorySupplier
     Task<bool> UpdateAsync(Supplier entity);
     Task<bool> UpdateManyAsync(IEnumerable<Supplier> entities);
     Task<bool> ExistsAsync(Supplier entity);
+    Task<bool> CheckBeforeSavingAsync(Supplier entity);
+
 }
 
 public class RepositorySupplier : RepositoryBase<Supplier>, IRepositorySupplier
 {
+    public async Task<bool> CheckBeforeSavingAsync(Supplier entity)
+    {
+        var exists = await ExistsAsync(entity);
+        return await UpsertAsync(entity, exists);
+    }
+
+    public async new Task<bool> ExistsAsync(Supplier entity)
+    {
+        return await DbContext.Suppliers.AnyAsync(x => x.SupplierId == entity.SupplierId);
+    }
 }

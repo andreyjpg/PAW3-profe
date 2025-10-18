@@ -1,0 +1,57 @@
+﻿@model PAW3.Models.DTOs.UserDTO
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<h2 class="mb-4">Edit Inventory Item</h2>
+
+<form asp-action="Edit" method="post" class="card p-4 shadow-sm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="UserId" class="form-label fw-bold"></label>
+            <input asp-for="UserId" class="form-control" placeholder="User Id" />
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="Username" class="form-label fw-bold"></label>
+            <input asp-for="Username" class="form-control" placeholder="Username" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="Email" class="form-label fw-bold"></label>
+            <input asp-for="Email" class="form-control" placeholder="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="PasswordHash" class="form-label fw-bold"></label>
+            <input asp-for="PasswordHash" class="form-control" placeholder="Password" type="password" />
+            <span asp-validation-for="PasswordHash" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="IsActive" class="form-label fw-bold"></label>
+            <input asp-for="IsActive" class="form-control" placeholder="Is Active?" type="checkbox" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="RoleId" class="form-label fw-bold"></label>
+            <input asp-for="RoleId" class="form-control" placeholder="" type="Role Id" />
+            <span asp-validation-for="RoleId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2">Update</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

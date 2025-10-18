@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PAW3.Core.BusinessLogic;
-using PAW3.Data.Models;
+using Inventory = PAW3.Data.Models.Inventory;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,38 +9,41 @@ namespace PAW3.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InventoryApiController(IInventoryBusiness InventoryBusiness) : ControllerBase
+    public class InventoryApiController(IInventoryBusiness inventoryBusiness) : ControllerBase
     {
         // GET: api/<InventoryApiController>
         [HttpGet]
         public async Task<IEnumerable<Inventory>> Get()
         {
-            return await InventoryBusiness.GetInventorys(id: null);
+            return await inventoryBusiness.GetInventorys(id: null);
         }
 
         // GET api/<InventoryApiController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IEnumerable<Inventory>> Get(int id)
         {
-            return "value";
+            return await inventoryBusiness.GetInventorys(id);
         }
 
         // POST api/<InventoryApiController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<bool> Post([FromBody] Inventory inventory)
         {
+            return await inventoryBusiness.UpsertInventoryAsync(inventory);
         }
 
         // PUT api/<InventoryApiController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<bool> Put(int id, [FromBody] Inventory value)
         {
+            return await inventoryBusiness.UpsertInventoryAsync(value);
         }
 
         // DELETE api/<InventoryApiController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
+            return await inventoryBusiness.DeleteInventoryAsync(id);
         }
     }
 }

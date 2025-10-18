@@ -24,21 +24,19 @@ public interface IUserRoleBusiness
     /// <returns></returns>
     Task<IEnumerable<UserRole>> GetUserRoles(int? id);
     /// <summary>
-    /// 
+    /// update and edit a UserRole information
     /// </summary>
-    /// <param name="UserRole"></param>
+    /// <param name="userRole"></param>
     /// <returns></returns>
-    Task<bool> SaveUserRoleAsync(UserRole UserRole);
+    Task<bool> UpsertUserRoleAsync(UserRole userRole);
 }
 
 public class UserRoleBusiness(IRepositoryUserRole repositoryUserRole) : IUserRoleBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveUserRoleAsync(UserRole UserRole)
+    public async Task<bool> UpsertUserRoleAsync(UserRole userRole)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryUserRole.UpdateAsync(UserRole);
+        return await repositoryUserRole.CheckBeforeSavingAsync(userRole);
     }
 
     /// </inheritdoc>

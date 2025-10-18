@@ -24,21 +24,19 @@ public interface IUserBusiness
     /// <returns></returns>
     Task<IEnumerable<User>> GetUsers(int? id);
     /// <summary>
-    /// 
+    /// update and edit a User information
     /// </summary>
-    /// <param name="User"></param>
+    /// <param name="user"></param>
     /// <returns></returns>
-    Task<bool> SaveUserAsync(User User);
+    Task<bool> UpsertUserAsync(User user);
 }
 
 public class UserBusiness(IRepositoryUser repositoryUser) : IUserBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveUserAsync(User User)
+    public async Task<bool> UpsertUserAsync(User user)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryUser.UpdateAsync(User);
+        return await repositoryUser.CheckBeforeSavingAsync(user);
     }
 
     /// </inheritdoc>

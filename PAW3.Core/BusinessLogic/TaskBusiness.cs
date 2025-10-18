@@ -26,21 +26,19 @@ public interface ITaskBusiness
     /// <returns></returns>
     Task<IEnumerable<TaskModel>> GetTasks(int? id);
     /// <summary>
-    /// 
+    /// update and edit a Task information
     /// </summary>
-    /// <param name="Task"></param>
+    /// <param name="category"></param>
     /// <returns></returns>
-    Task<bool> SaveTaskAsync(TaskModel Task);
+    Task<bool> UpsertTaskAsync(TaskModel task);
 }
 
 public class TaskBusiness(IRepositoryTask repositoryTask) : ITaskBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveTaskAsync(TaskModel Task)
+    public async Task<bool> UpsertTaskAsync(TaskModel task)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryTask.UpdateAsync(Task);
+        return await repositoryTask.CheckBeforeSavingAsync(task);
     }
 
     /// </inheritdoc>

@@ -324,7 +324,7 @@ namespace PAW3.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModified")
@@ -354,34 +354,44 @@ namespace PAW3.Data.Migrations
 
             modelBuilder.Entity("PAW3.Data.Models.UserAction", b =>
                 {
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(18, 0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
+
                     b.Property<string>("Description")
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
-
-                    b.Property<decimal?>("Id")
-                        .HasColumnType("numeric(18, 0)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
 
+                    b.HasKey("Id");
+
                     b.ToTable("UserActions");
                 });
 
             modelBuilder.Entity("PAW3.Data.Models.UserRole", b =>
                 {
-                    b.Property<decimal?>("Id")
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("numeric(18, 0)");
 
-                    b.Property<decimal?>("RoldId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
+
+                    b.Property<decimal?>("RoleId")
                         .HasColumnType("numeric(18, 0)")
-                        .HasColumnName("RoldID");
+                        .HasColumnName("RoleID");
 
                     b.Property<decimal?>("UserId")
                         .HasColumnType("numeric(18, 0)")
                         .HasColumnName("UserID");
+
+                    b.HasKey("Id");
 
                     b.ToTable("UserRoles");
                 });

@@ -8,6 +8,9 @@ namespace PAW3.ServiceLocator.Services;
 public interface ISupplierService
 {
     Task<IEnumerable<SupplierDTO>> GetDataAsync();
+    Task<bool> CreateDataAsync(string content);
+    Task<bool> UpdateDataAsync(string content);
+    Task<bool> DeleteDataAsync(string id);
 }
 
 public class SupplierService(IRestProvider restProvider, IConfiguration configuration) : IService<SupplierDTO>, ISupplierService
@@ -17,6 +20,27 @@ public class SupplierService(IRestProvider restProvider, IConfiguration configur
         var url = configuration.GetStringFromAppSettings("APIS", "Supplier");
         var response = await restProvider.GetAsync(url, null);
         return await JsonProvider.DeserializeAsync<IEnumerable<SupplierDTO>>(response);
+    }
+
+    public async Task<bool> CreateDataAsync(string content)
+    {
+        var url = configuration.GetStringFromAppSettings("APIS", "Supplier");
+        var response = await restProvider.PostAsync(url, content);
+        return bool.Parse(response);
+    }
+
+    public async Task<bool> UpdateDataAsync(string content)
+    {
+        var url = configuration.GetStringFromAppSettings("APIS", "Supplier");
+        var response = await restProvider.PutAsync(url, content);
+        return bool.Parse(response);
+    }
+
+    public async Task<bool> DeleteDataAsync(string id)
+    {
+        var url = configuration.GetStringFromAppSettings("APIS", "Supplier");
+        var response = await restProvider.DeleteAsync(url, id);
+        return bool.Parse(response);
     }
 
 }

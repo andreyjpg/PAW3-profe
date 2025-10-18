@@ -1,0 +1,31 @@
+﻿@model PAW3.Models.DTOs.UserRoleDTO
+@{
+    ViewData["Title"] = "Edit Inventory";
+}
+
+<h2 class="mb-4">Edit User Role Item</h2>
+
+<form asp-action="Edit" method="post" class="card p-4 shadow-sm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="RoleId" class="form-label fw-bold"></label>
+            <input asp-for="RoleId" class="form-control" placeholder="Role Id" />
+            <span asp-validation-for="RoleId" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="UserId" class="form-label fw-bold"></label>
+            <input asp-for="UserId" class="form-control" placeholder="User Id" />
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2">Update</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

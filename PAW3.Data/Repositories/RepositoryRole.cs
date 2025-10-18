@@ -1,4 +1,5 @@
-﻿using PAW3.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PAW3.Data.Models;
 
 namespace PAW3.Data.Repositories;
 
@@ -12,8 +13,20 @@ public interface IRepositoryRole
     Task<bool> UpdateAsync(Role entity);
     Task<bool> UpdateManyAsync(IEnumerable<Role> entities);
     Task<bool> ExistsAsync(Role entity);
+    Task<bool> CheckBeforeSavingAsync(Role entity);
+
 }
 
 public class RepositoryRole : RepositoryBase<Role>, IRepositoryRole
 {
+    public async Task<bool> CheckBeforeSavingAsync(Role entity)
+    {
+        var exists = await ExistsAsync(entity);
+        return await UpsertAsync(entity, exists);
+    }
+
+    public async new Task<bool> ExistsAsync(Role entity)
+    {
+        return await DbContext.Roles.AnyAsync(x => x.RoleId == entity.RoleId);
+    }
 }

@@ -8,6 +8,9 @@ namespace PAW3.ServiceLocator.Services;
 public interface IComponentService
 {
     Task<IEnumerable<ComponentDTO>> GetDataAsync();
+    Task<bool> CreateDataAsync(string content);
+    Task<bool> UpdateDataAsync(string content);
+    Task<bool> DeleteDataAsync(string id);
 }
 
 public class ComponentService(IRestProvider restProvider, IConfiguration configuration) : IService<ComponentDTO>, IComponentService
@@ -17,6 +20,27 @@ public class ComponentService(IRestProvider restProvider, IConfiguration configu
         var url = configuration.GetStringFromAppSettings("APIS", "Component");
         var response = await restProvider.GetAsync(url, null);
         return await JsonProvider.DeserializeAsync<IEnumerable<ComponentDTO>>(response);
+    }
+
+    public async Task<bool> CreateDataAsync(string content)
+    {
+        var url = configuration.GetStringFromAppSettings("APIS", "Component");
+        var response = await restProvider.PostAsync(url, content);
+        return bool.Parse(response);
+    }
+
+    public async Task<bool> UpdateDataAsync(string content)
+    {
+        var url = configuration.GetStringFromAppSettings("APIS", "Component");
+        var response = await restProvider.PutAsync(url, content);
+        return bool.Parse(response);
+    }
+
+    public async Task<bool> DeleteDataAsync(string id)
+    {
+        var url = configuration.GetStringFromAppSettings("APIS", "Component");
+        var response = await restProvider.DeleteAsync(url, id);
+        return bool.Parse(response);
     }
 
 }

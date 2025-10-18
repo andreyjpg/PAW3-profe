@@ -18,27 +18,25 @@ public interface ICategoryBusiness
     /// <returns></returns>
     Task<bool> DeleteCategoryAsync(int id);
     /// <summary>
-    /// 
+    /// get list of Categorys 
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<IEnumerable<Category>> GetCategorys(int? id);
     /// <summary>
-    /// 
+    /// update and edit a Category information
     /// </summary>
-    /// <param name="Category"></param>
+    /// <param name="category"></param>
     /// <returns></returns>
-    Task<bool> SaveCategoryAsync(Category Category);
+    Task<bool> UpsertCategoryAsync(Category category);
 }
 
 public class CategoryBusiness(IRepositoryCategory repositoryCategory) : ICategoryBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveCategoryAsync(Category Category)
+    public async Task<bool> UpsertCategoryAsync(Category category)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryCategory.UpdateAsync(Category);
+        return await repositoryCategory.CheckBeforeSavingAsync(category);
     }
 
     /// </inheritdoc>

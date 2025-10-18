@@ -22,11 +22,6 @@ public class RepositoryProduct : RepositoryBase<Product>, IRepositoryProduct
     public async Task<bool> CheckBeforeSavingAsync(Product entity)
     {
         var exists = await ExistsAsync(entity);
-        if (exists)
-        {
-            // algo mas 
-        }
-
         return await UpsertAsync(entity, exists);
     }
 

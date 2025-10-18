@@ -1,0 +1,44 @@
+﻿@model PAW3.Models.DTOs.InventoryDTO
+@{
+    ViewData["Title"] = "Edit Inventory";
+}
+
+<h2 class="mb-4">Edit Inventory Item</h2>
+
+<form asp-action="Edit" method="post" class="card p-4 shadow-sm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="InventoryId" />
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="UnitPrice" class="form-label fw-bold"></label>
+            <input asp-for="UnitPrice" class="form-control" />
+            <span asp-validation-for="UnitPrice" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="UnitsInStock" class="form-label fw-bold"></label>
+            <input asp-for="UnitsInStock" class="form-control" />
+            <span asp-validation-for="UnitsInStock" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="ProductId" class="form-label fw-bold"></label>
+            <input asp-for="ProductId" class="form-control" />
+            <span asp-validation-for="ProductId" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="modifiedBy" class="form-label fw-bold"></label>
+            <input asp-for="modifiedBy" class="form-control" />
+            <span asp-validation-for="modifiedBy" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary me-2">Update</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

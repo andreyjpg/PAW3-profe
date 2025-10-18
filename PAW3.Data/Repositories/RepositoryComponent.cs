@@ -1,4 +1,5 @@
-﻿using PAW3.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PAW3.Data.Models;
 
 namespace PAW3.Data.Repositories;
 public interface IRepositoryComponent
@@ -11,9 +12,21 @@ public interface IRepositoryComponent
     Task<bool> UpdateAsync(Component entity);
     Task<bool> UpdateManyAsync(IEnumerable<Component> entities);
     Task<bool> ExistsAsync(Component entity);
+    Task<bool> CheckBeforeSavingAsync(Component entity);
+
 }
 
 public class RepositoryComponent : RepositoryBase<Component>, IRepositoryComponent
 {
+    public async Task<bool> CheckBeforeSavingAsync(Component entity)
+    {
+        var exists = await ExistsAsync(entity);
+        return await UpsertAsync(entity, exists);
+    }
+
+    public async new Task<bool> ExistsAsync(Component entity)
+    {
+        return await DbContext.Components.AnyAsync(x => x.Id == entity.Id);
+    }
 }
 

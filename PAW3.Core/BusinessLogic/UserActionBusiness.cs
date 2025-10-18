@@ -24,21 +24,19 @@ public interface IUserActionBusiness
     /// <returns></returns>
     Task<IEnumerable<UserAction>> GetUserActions(int? id);
     /// <summary>
-    /// 
+    /// update and edit a UserAction information
     /// </summary>
-    /// <param name="UserAction"></param>
+    /// <param name="userAction"></param>
     /// <returns></returns>
-    Task<bool> SaveUserActionAsync(UserAction UserAction);
+    Task<bool> UpsertUserActionAsync(UserAction userAction);
 }
 
 public class UserActionBusiness(IRepositoryUserAction repositoryUserAction) : IUserActionBusiness
 {
     /// </inheritdoc>
-    public async Task<bool> SaveUserActionAsync(UserAction UserAction)
+    public async Task<bool> UpsertUserActionAsync(UserAction userAction)
     {
-        // que tengan mas de 5 quantity
-        // sabado o domingo solo puedo salvar de 8 a 12
-        return await repositoryUserAction.UpdateAsync(UserAction);
+        return await repositoryUserAction.CheckBeforeSavingAsync(userAction);
     }
 
     /// </inheritdoc>
@@ -52,8 +50,8 @@ public class UserActionBusiness(IRepositoryUserAction repositoryUserAction) : IU
     public async Task<IEnumerable<UserAction>> GetUserActions(int? id)
     {
         return id == null
-            ? await repositoryUserAction.ReadAsync()
-            : [await repositoryUserAction.FindAsync((int)id)];
+           ? await repositoryUserAction.ReadAsync()
+           : [await repositoryUserAction.FindAsync((int)id)];
     }
 }
 
