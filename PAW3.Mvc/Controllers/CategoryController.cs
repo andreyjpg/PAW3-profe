@@ -42,6 +42,8 @@ namespace PAW3.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                dto.LastModified = DateTime.Now;
+                dto.ModifiedBy = "MVC";
                 var json = JsonSerializer.Serialize(dto);
                 var success = await _serviceLocator.SaveDataAsync("category", json);
 
@@ -70,6 +72,8 @@ namespace PAW3.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                category.LastModified = DateTime.Now;
+                category.ModifiedBy = "MVC";
                 var json = JsonSerializer.Serialize(category);
                 var success = await _serviceLocator.UpdateDataAsync("category", json);
 

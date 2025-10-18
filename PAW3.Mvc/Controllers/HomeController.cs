@@ -48,6 +48,68 @@ namespace PAW3.Mvc.Controllers
         //    return RedirectToAction(nameof(Index));
         //}
 
+        // CREATE
+        [HttpGet]
+        public IActionResult Create() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Create(ProductDTO dto)
+        {
+            if (ModelState.IsValid)
+            {
+                dto.LastModified = DateTime.Now;
+                dto.ModifiedBy = "MVC";
+                var json = JsonSerializer.Serialize(dto);
+                var success = await _serviceLocator.SaveDataAsync("product", json);
+
+                if (success)
+                    return RedirectToAction(nameof(Index));
+            }
+
+            return View(dto);
+        }
+
+        //EDIT
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var products = await _serviceLocator.GetDataAsync<ProductDTO>("product");
+            var product = products.FirstOrDefault(c => c.ProductId == id);
+
+            if (product == null)
+                return NotFound();
+
+            return View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProductDTO product)
+        {
+            if (ModelState.IsValid)
+            {
+                product.LastModified = DateTime.Now;
+                product.ModifiedBy = "MVC";
+                var json = JsonSerializer.Serialize(product);
+                var success = await _serviceLocator.UpdateDataAsync("product", json);
+
+                if (success)
+                    return RedirectToAction(nameof(Index));
+            }
+
+            return View(product);
+        }
+
+        //DELETE
+        public async Task<IActionResult> Delete(string id)
+        {
+            var success = await _serviceLocator.DeleteDataAsync("product", id);
+
+            if (!success)
+                _logger.LogWarning($"Failed to delete product with ID {id}");
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         public IActionResult Privacy()
         {

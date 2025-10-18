@@ -47,7 +47,7 @@ namespace PAW3.Mvc.Controllers
                 // Si no viene definido, se setea automáticamente
                 if (dto.DateAdded == default)
                     dto.DateAdded = DateTime.UtcNow;
-
+                dto.modifiedBy = "MVC";
                 dto.LastUpdate = DateTime.UtcNow;
 
                 var json = JsonSerializer.Serialize(dto);
@@ -73,6 +73,8 @@ namespace PAW3.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                dto.LastUpdate = DateTime.Now;
+                dto.modifiedBy = "MVC";
                 var json = JsonSerializer.Serialize(dto);
                 var ok = await _serviceLocator.UpdateDataAsync("inventory", json);
                 if (ok) return RedirectToAction(nameof(Index));

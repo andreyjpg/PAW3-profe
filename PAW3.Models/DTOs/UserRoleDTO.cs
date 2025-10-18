@@ -11,8 +11,8 @@ public class UserRoleDTO
 {
     [JsonPropertyName("id")]
     public decimal? Id { get; set; }
-    [JsonPropertyName("roleId")]
-    public decimal? RoldId { get; set; }
+    [JsonPropertyName("rolId")]
+    public int? RoleId { get; set; }
     [JsonPropertyName("userId")]
     public decimal? UserId { get; set; }
 }

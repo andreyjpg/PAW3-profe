@@ -179,12 +179,12 @@ public partial class ProductDbContext : DbContext
 
         modelBuilder.Entity<UserAction>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.Id);
 
             entity.Property(e => e.Description)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Id).HasColumnType("numeric(18, 0)");
+            entity.Property(e => e.Id).HasColumnType("numeric(18, 0)").ValueGeneratedOnAdd();
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -192,12 +192,12 @@ public partial class ProductDbContext : DbContext
 
         modelBuilder.Entity<UserRole>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id).HasColumnType("numeric(18, 0)");
-            entity.Property(e => e.RoldId)
+            entity.Property(e => e.Id).HasColumnType("numeric(18, 0)").ValueGeneratedOnAdd();
+            entity.Property(e => e.RoleId)
                 .HasColumnType("numeric(18, 0)")
-                .HasColumnName("RoldID");
+                .HasColumnName("RoleID");
             entity.Property(e => e.UserId)
                 .HasColumnType("numeric(18, 0)")
                 .HasColumnName("UserID");

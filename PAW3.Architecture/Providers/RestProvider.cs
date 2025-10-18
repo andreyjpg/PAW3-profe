@@ -78,8 +78,13 @@ public class RestProvider : IRestProvider
 	{
 		try
 		{
+
 			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
 				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException($"Error: {response.StatusCode}, Details: {response}");
+            }
             var responseBody = await response.Content.ReadAsStringAsync();
             var result = await RestProviderHelpers.GetResponse(response);
 			return result;

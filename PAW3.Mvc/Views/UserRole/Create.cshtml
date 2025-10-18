@@ -1,0 +1,30 @@
+﻿@model PAW3.Models.DTOs.UserRoleDTO
+@{
+    ViewData["Title"] = "Create User Role";
+}
+
+<h2 class="mb-4">Add New User Role Item</h2>
+
+<form asp-action="Create" method="post" class="card p-4 shadow-sm">
+    @Html.AntiForgeryToken()
+
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="RoleId" class="form-label fw-bold"></label>
+            <input asp-for="RoleId" class="form-control" placeholder="Role Id" />
+            <span asp-validation-for="RoleId" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="UserId" class="form-label fw-bold"></label>
+            <input asp-for="UserId" class="form-control" placeholder="User Id" />
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success me-2">Save</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

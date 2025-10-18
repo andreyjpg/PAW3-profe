@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PAW3.Data.Models;
 
@@ -11,9 +12,11 @@ using PAW3.Data.Models;
 namespace PAW3.Data.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    partial class ProductDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251018045504_addprimaryKeys")]
+    partial class addprimaryKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,7 +327,7 @@ namespace PAW3.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModified")
@@ -354,44 +357,34 @@ namespace PAW3.Data.Migrations
 
             modelBuilder.Entity("PAW3.Data.Models.UserAction", b =>
                 {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric(18, 0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
-
                     b.Property<string>("Description")
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<decimal>("Id")
+                        .HasColumnType("numeric(18, 0)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
 
-                    b.HasKey("Id");
-
                     b.ToTable("UserActions");
                 });
 
             modelBuilder.Entity("PAW3.Data.Models.UserRole", b =>
                 {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<decimal?>("Id")
                         .HasColumnType("numeric(18, 0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
-
-                    b.Property<decimal?>("RoleId")
+                    b.Property<decimal?>("RoldId")
                         .HasColumnType("numeric(18, 0)")
-                        .HasColumnName("RoleID");
+                        .HasColumnName("RoldID");
 
                     b.Property<decimal?>("UserId")
                         .HasColumnType("numeric(18, 0)")
                         .HasColumnName("UserID");
-
-                    b.HasKey("Id");
 
                     b.ToTable("UserRoles");
                 });
