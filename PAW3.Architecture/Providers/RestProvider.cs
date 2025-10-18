@@ -1,144 +1,44 @@
 ﻿using PAW3.Architecture.Helpers;
-using System.Collections.Generic;
-using System.Net;
 
-namespace PAW3.Architecture;
-
-/// <summary>
-/// Interface defining methods for RESTful operations.
-/// </summary>
-public interface IRestProvider
+public abstract class RestOperation
 {
-	/// <summary>
-	/// Deletes a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the DELETE request.</param>
-	/// <param name="id">The ID of the resource to delete.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> DeleteAsync(string endpoint, string ids);
+    public async Task<string> ExecuteAsync(string endpoint, string? content = null)
+    {
+        try
+        {
+            using var client = RestProviderHelpers.CreateHttpClient(endpoint);
+            var response = await SendRequest(client, endpoint, content);
+            return await RestProviderHelpers.GetResponse(response);
+        }
+        catch (Exception ex)
+        {
+            throw RestProviderHelpers.ThrowError(endpoint, ex);
+        }
+    }
 
-	/// <summary>
-	/// Retrieves a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the GET request.</param>
-	/// <param name="id">The ID of the resource to retrieve. Can be null if not applicable.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> GetAsync(string endpoint, string? id);
-
-	/// <summary>
-	/// Creates a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the POST request.</param>
-	/// <param name="content">The content to send in the request body.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> PostAsync(string endpoint, string content);
-
-	/// <summary>
-	/// Updates a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the PUT request.</param>
-	/// <param name="requestUri">The URI of the resource to update.</param>
-	/// <param name="content">The content to send in the request body.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	Task<string> PutAsync(string endpoint, string content);
+    protected abstract Task<HttpResponseMessage> SendRequest(HttpClient client, string endpoint, string? content);
 }
 
-/// <summary>
-/// Implementation of the IRestProvider interface, providing methods for RESTful operations.
-/// </summary>
-public class RestProvider : IRestProvider
+public class PostOperation : RestOperation
 {
-	/// <summary>
-	/// Retrieves a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the GET request.</param>
-	/// <param name="id">The ID of the resource to retrieve. Can be null if not applicable.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> GetAsync(string endpoint, string? id)
-	{
-		try
-		{
-			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.GetAsync(id);
-			return await RestProviderHelpers.GetResponse(response);
-		}
-		catch (Exception ex)
-		{
-			throw RestProviderHelpers.ThrowError(endpoint, ex);
-		}
-	}
+    protected override Task<HttpResponseMessage> SendRequest(HttpClient client, string endpoint, string? content)
+        => client.PostAsync(endpoint, RestProviderHelpers.CreateContent(content!));
+}
 
-	/// <summary>
-	/// Creates a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the POST request.</param>
-	/// <param name="content">The content to send in the request body.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> PostAsync(string endpoint, string content)
-	{
-		try
-		{
+public class UpdateOperation : RestOperation
+{
+    protected override Task<HttpResponseMessage> SendRequest(HttpClient client, string endpoint, string? content)
+        => client.PutAsync(endpoint, RestProviderHelpers.CreateContent(content!));
+}
 
-			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApplicationException($"Error: {response.StatusCode}, Details: {response}");
-            }
-            var responseBody = await response.Content.ReadAsStringAsync();
-            var result = await RestProviderHelpers.GetResponse(response);
-			return result;
-		}
-		catch (Exception ex)
-		{
-			throw RestProviderHelpers.ThrowError(endpoint, ex);
-		}
-	}
+public class DeleteOperation : RestOperation
+{
+    protected override Task<HttpResponseMessage> SendRequest(HttpClient client, string endpoint, string? content)
+        => client.DeleteAsync(endpoint);
+}
 
-	/// <summary>
-	/// Updates a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the PUT request.</param>
-	/// <param name="id">The ID of the resource to update.</param>
-	/// <param name="content">The content to send in the request body.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> PutAsync(string endpoint, string content)
-	{
-		try
-		{
-			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.PostAsync(endpoint, RestProviderHelpers.CreateContent(content));
-			var result = await RestProviderHelpers.GetResponse(response);
-			return result;
-		}
-		catch (Exception ex)
-		{
-			throw RestProviderHelpers.ThrowError(endpoint, ex);
-		}
-	}
-
-	/// <summary>
-	/// Deletes a resource asynchronously.
-	/// </summary>
-	/// <param name="endpoint">The endpoint for the DELETE request.</param>
-	/// <param name="id">The ID of the resource to delete.</param>
-	/// <returns>A task that represents the asynchronous operation, containing the response as a string.</returns>
-	public async Task<string> DeleteAsync(string endpoint, string id)
-	{
-		try
-		{
-			var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-				.DeleteAsync($"{endpoint}/{id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApplicationException($"Error: {response.StatusCode}, Details: {response}");
-            }
-            var result = await RestProviderHelpers.GetResponse(response);
-			return result;
-		}
-		catch (Exception ex)
-		{
-			throw RestProviderHelpers.ThrowError(endpoint, ex);
-		}
-	}
+public class GetOperation : RestOperation
+{
+    protected override Task<HttpResponseMessage> SendRequest(HttpClient client, string endpoint, string? content)
+        => client.GetAsync(content);
 }

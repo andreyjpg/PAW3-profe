@@ -13,20 +13,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IRestProvider, RestProvider>();
 builder.Services.AddScoped<IDogDataService, DogDataService>();
 builder.Services.AddScoped<ITempDataService, TempDataService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IComponentService, ComponentService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
-builder.Services.AddScoped<INotificationService, NotificationService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
-builder.Services.AddScoped<ITaskService, TaskService>();
-builder.Services.AddScoped<IUserActionService, UserActionService>();
-builder.Services.AddScoped<IUserRoleService, UserRoleService>();
-builder.Services.AddScoped<IUserService, UserService>();
+
 
 builder.Services.AddScoped<IService<ProductDTO>, ProductService>();
 builder.Services.AddScoped<IService<CategoryDTO>, CategoryService>();

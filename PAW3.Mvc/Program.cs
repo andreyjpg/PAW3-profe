@@ -9,9 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IRestProvider, RestProvider>();
 builder.Services.AddScoped<IDogDataService, DogDataService>();
-builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IServiceLocatorService, ServiceLocatorService>();
 builder.Services.AddScoped<IServiceMapper, ServiceMapper>();
 builder.Services.AddScoped<IService<ProductDTO>, ProductService>();

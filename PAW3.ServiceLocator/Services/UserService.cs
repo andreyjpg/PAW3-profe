@@ -1,46 +1,12 @@
 ﻿using PAW3.Architecture;
 using PAW3.Architecture.Providers;
 using PAW3.Models.DTOs;
-using PAW3.ServiceLocator.Services.Contracts;
+using PAW3.ServiceLocator.Services.Base;
 
 namespace PAW3.ServiceLocator.Services;
 
-public interface IUserService
+public class UserService : BaseService<UserDTO>
 {
-    Task<IEnumerable<UserDTO>> GetDataAsync();
-    Task<bool> CreateDataAsync(string content);
-    Task<bool> UpdateDataAsync(string content);
-    Task<bool> DeleteDataAsync(string id);
-}
-
-public class UserService(IRestProvider restProvider, IConfiguration configuration) : IService<UserDTO>, IUserService
-{
-    public async Task<IEnumerable<UserDTO>> GetDataAsync()
-    {
-        var url = configuration.GetStringFromAppSettings("APIS", "User");
-        var response = await restProvider.GetAsync(url, null);
-        return await JsonProvider.DeserializeAsync<IEnumerable<UserDTO>>(response);
-    }
-
-    public async Task<bool> CreateDataAsync(string content)
-    {
-        var url = configuration.GetStringFromAppSettings("APIS", "User");
-        var response = await restProvider.PostAsync(url, content);
-        return bool.Parse(response);
-    }
-
-    public async Task<bool> UpdateDataAsync(string content)
-    {
-        var url = configuration.GetStringFromAppSettings("APIS", "User");
-        var response = await restProvider.PutAsync(url, content);
-        return bool.Parse(response);
-    }
-
-    public async Task<bool> DeleteDataAsync(string id)
-    {
-        var url = configuration.GetStringFromAppSettings("APIS", "User");
-        var response = await restProvider.DeleteAsync(url, id);
-        return bool.Parse(response);
-    }
-
+    public UserService(IConfiguration configuration)
+        : base(configuration, "User") { }
 }

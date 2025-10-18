@@ -1,6 +1,7 @@
 ﻿using PAW3.Architecture;
 using PAW3.Architecture.Providers;
 using PAW3.ServiceLocator.Helper;
+using System;
 
 namespace PAW3.Mvc.ServiceLocator;
 
@@ -13,32 +14,34 @@ public interface IServiceLocatorService
 
 }
 
-public class ServiceLocatorService(IRestProvider restProvider, IServiceMapper serviceMapper) : IServiceLocatorService
+public class ServiceLocatorService( IServiceMapper serviceMapper) : IServiceLocatorService
 {
+    private string url = "https://localhost:7130/api/ServiceLocator";
     public async Task<IEnumerable<T>> GetDataAsync<T>(string name)
     {
-        var response = await restProvider.GetAsync("https://localhost:7130/api/ServiceLocator/", name);
+        var operation = new GetOperation();
+        var response = await operation.ExecuteAsync($"{url}/{name}", null);
         return await JsonProvider.DeserializeAsync<IEnumerable<T>>(response);
     }
 
     public async Task<bool> UpdateDataAsync(string name, string content)
     {
-        var response = await restProvider.PutAsync($"https://localhost:7130/api/ServiceLocator/{name}", content);
-        Console.WriteLine(response);
+        var operation = new UpdateOperation();
+        var response = await operation.ExecuteAsync($"{url}/{name}", content);
         return response.Length > 0;
     }
 
     public async Task<bool> DeleteDataAsync(string name, string contentId )
     {
-        var response = await restProvider.DeleteAsync($"https://localhost:7130/api/ServiceLocator/{name}", contentId);
-        Console.WriteLine(response);
+        var operation = new DeleteOperation();
+        var response = await operation.ExecuteAsync($"{url}/{name}/{contentId}");
         return response.Length > 0;
     }
 
     public async Task<bool> SaveDataAsync(string name, string content)
     {
-        var response = await restProvider.PostAsync($"https://localhost:7130/api/ServiceLocator/{name}", content);
-        Console.WriteLine(response);
+        var operation = new PostOperation();
+        var response = await operation.ExecuteAsync($"{url}/{name}", content);
         return response.Length > 0;
     }
 }

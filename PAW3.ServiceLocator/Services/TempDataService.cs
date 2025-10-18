@@ -5,19 +5,18 @@ namespace PAW3.ServiceLocator.Services;
 
 public class TempDataService : ITempDataService
 {
-    private readonly IRestProvider _restProvider;
     private readonly IConfiguration _configuration;
 
-    public TempDataService(IRestProvider restProvider, IConfiguration configuration)
+    public TempDataService( IConfiguration configuration)
     {
-        _restProvider = restProvider;
         _configuration = configuration;
     }
 
     public async Task<IEnumerable<string>> GetDataAsync()
     {
         var url = _configuration.GetStringFromAppSettings("APIS", "TempData");
-        var response = await _restProvider.GetAsync(url, null);
+        var operation = new GetOperation();
+        var response = await operation.ExecuteAsync(url, null);
         return await JsonProvider.DeserializeAsync<IEnumerable<string>>(response);
     }
 }
