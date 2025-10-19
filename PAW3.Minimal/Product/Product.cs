@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 public partial class Product
 {
     public int ProductId { get; set; }
@@ -22,4 +21,9 @@ public partial class Product
 
     public string? ModifiedBy { get; set; }
 
+    public virtual Category? Category { get; set; }
+
+    public virtual Inventory? Inventory { get; set; }
+
+    public virtual Supplier? Supplier { get; set; }
 }
